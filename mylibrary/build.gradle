@@ -51,7 +51,7 @@ afterEvaluate {
             fullRelease(MavenPublication) {
                 from components.getAt("release")
                 groupId = 'com.github.KamranAfridi'
-                artifactId = 'mylibrary'
+                artifactId = 'new_library_3'
                 version = '1.0.1'
             }
         }
