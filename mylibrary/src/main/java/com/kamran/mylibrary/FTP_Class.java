@@ -1,8 +1,12 @@
 package com.kamran.mylibrary;
+import android.content.Context;
 import android.util.Log;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
+
+import java.io.FileInputStream;
+
 public class FTP_Class {
     public FTPClient mFTPClient = null;
 
@@ -31,5 +35,27 @@ public class FTP_Class {
         }
 
         return new FTP_Model(mFTPClient, status);
+    }
+
+    public boolean ftpUpload(String srcFilePath, String desFileName,
+                             String desDirectory, Context context) {
+        boolean status = false;
+        try {
+            FileInputStream srcFileStream = new FileInputStream(srcFilePath);
+
+            // change working directory to the destination directory
+            // if (ftpChangeDirectory(desDirectory)) {
+            status = mFTPClient.storeFile(desFileName, srcFileStream);
+            // }
+
+            srcFileStream.close();
+
+            return status;
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("FTP", "upload failed: " + e);
+        }
+
+        return status;
     }
 }
