@@ -1,36 +1,33 @@
 package com.kamran.new_library;
-import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.appcompat.app.AppCompatActivity;
 import com.kamran.mylibrary.FTP_Class;
 import com.kamran.mylibrary.FTP_Model;
 import com.kamran.mylibrary.Monitor;
 import com.kamran.mylibrary.VolleyRequest;
-
 import org.apache.commons.net.ftp.FTPClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 public class MainActivity extends AppCompatActivity {
-
     private Monitor monitor;
     private VolleyRequest mVolleyRequest;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        if (android.os.Build.VERSION.SDK_INT > 9) {
+//            StrictMode.ThreadPolicy policy =
+//                    new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//            StrictMode.setThreadPolicy(policy);
+//        }
         TextView tv = findViewById(R.id.tv);
-
         mVolleyRequest = new VolleyRequest(this);
-
         mVolleyRequest.fetchProfile(getContentResolver(), new VolleyRequest.VolleyResponseListener() {
-
-
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -64,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
                                 String password = person
                                         .getString("Password");
                                 String testUser = person.getString("Testuser");
-
                                 monitor.setStatus(status);
                                 monitor.setiMEI1(imei1);
                                 monitor.setLoginName(loginName);
@@ -82,9 +78,7 @@ public class MainActivity extends AppCompatActivity {
                                 monitor.setAge(Age);
                                 monitor.setPassword(password);
                                 monitor.setTestUser(testUser);
-
                                 tv.setText(monitor.getName());
-
                             }
                         } else {
                             Toast.makeText(MainActivity.this, "No monitor found please contact to your dmo ", Toast.LENGTH_SHORT).show();
@@ -96,21 +90,31 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-
             @Override
             public void onError(String error) {
                 // Handle error here
                 tv.setText(error);
             }
         });
-
-
-        FTP_Model ftp_model = new FTP_Class().ftpConnect("","","",0);
-        Log.e("FTP", String.valueOf(ftp_model.isStatus()));
-        FTPClient ftp_client = ftp_model.getFtpClient();
-        if(ftp_client==null){
-            Log.e("FTP", "FTP Client is null");
-        }
-
+        new connect_FTP().do_connect();
     }
+
+     class connect_FTP  {
+
+        void do_connect()
+        {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    FTP_Model ftp_model = new FTP_Class().ftpConnect("175.107.63.45", "SurveyFTP", "FTP_fkny@EMA_2023", 21);
+                    Log.e("FTP", String.valueOf(ftp_model.isStatus()));
+                    FTPClient ftp_client = ftp_model.getFtpClient();
+                    if (ftp_client == null) {
+                        Log.e("FTP", "FTP Client is null");
+                    }
+                }
+            }).start();
+        }
+     }
+
 }

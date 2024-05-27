@@ -21,10 +21,11 @@ public class FTP_Class {
                 mFTPClient.setFileType(FTP.BINARY_FILE_TYPE);
                 mFTPClient.enterLocalPassiveMode();
                 status = true;
+                Log.e("FTP", "Connected");
                 return new FTP_Model(mFTPClient, status);
             }
         } catch (Exception e) {
-            Log.d("FTP", "Error: could not connect to host " + host);
+            e.printStackTrace();
         }
         return new FTP_Model(mFTPClient, status);
     }
