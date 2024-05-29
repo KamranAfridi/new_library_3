@@ -107,10 +107,9 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     FTP_Model ftp_model = new FTP_Class().ftpConnect("175.107.63.45", "SurveyFTP", "FTP_fkny@EMA_2023", 21);
-                    Log.e("FTP", String.valueOf(ftp_model.isStatus()));
-                    FTPClient ftp_client = ftp_model.getFtpClient();
-                    if (ftp_client == null) {
-                        Log.e("FTP", "FTP Client is null");
+                    if(ftp_model != null)
+                    {
+                        Log.e("FTP", "Hello");
                     }
                 }
             }).start();
