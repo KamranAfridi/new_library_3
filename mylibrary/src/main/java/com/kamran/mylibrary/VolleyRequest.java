@@ -31,8 +31,7 @@ public class VolleyRequest extends VolleyBase{
                     int resultCode = response.getInt("resultCode");
                     if(resultCode==1)
                     {
-                        String ANDROID_ID = Settings.Secure.getString(cr,
-                                Settings.Secure.ANDROID_ID);
+                        String ANDROID_ID = getAndroidId(cr);
                         final String URL = url + "&imei1=" + ANDROID_ID + "&imei2=" + ANDROID_ID;
                         monitorList = new ArrayList<Monitor>();
                         JsonObjectRequest req = new JsonObjectRequest(URL, null,
@@ -57,6 +56,11 @@ public class VolleyRequest extends VolleyBase{
         });
 
         return monitor;
+    }
+
+    public static String getAndroidId(ContentResolver cr) {
+        return Settings.Secure.getString(cr,
+                Settings.Secure.ANDROID_ID);
     }
 
 }
